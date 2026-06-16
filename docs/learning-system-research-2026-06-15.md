@@ -1,8 +1,8 @@
-# Learning System Design From Honcho And Hermes
+# Learning System Research Notes
 
 Date: 2026-06-15
 
-Scope: this document inspects the learning and memory behavior in `plastic-labs/honcho` and `NousResearch/hermes-agent`, then maps the useful patterns into a generic ReSono Voice Module design. The goal is not to vendor either project into the module. The goal is to build the right learning hooks, storage contract, retrieval contract, and safety boundaries so a future data-store adapter can implement them cleanly.
+Scope: this document inspects two external open-source learning and memory systems, then maps the useful patterns into a generic ReSono Voice Module design. The goal is not to vendor either project into the module. The goal is to build the right learning hooks, storage contract, retrieval contract, and safety boundaries so a future data-store adapter can implement them cleanly.
 
 Important module constraint: the current Voice Module should remain store-agnostic. It should expose learning hooks and a provider contract, not force session persistence.
 
@@ -26,11 +26,11 @@ Upstream references:
 
 ## Executive finding
 
-Honcho and Hermes solve two different parts of learning.
+The inspected systems solve two different parts of learning.
 
-Honcho is the better pattern for long-term semantic user modeling. It stores raw interaction events, queues background derivation jobs, extracts compact observations, embeds and deduplicates them, and exposes them through context, search, queue status, and working representation APIs.
+The semantic-memory pattern is strongest for long-term user modeling. It stores raw interaction events, queues background derivation jobs, extracts compact observations, embeds and deduplicates them, and exposes them through context, search, queue status, and working representation APIs.
 
-Hermes is the better pattern for bounded agent self-improvement. It separates compact declarative memory from procedural learning. Declarative facts live in small memory stores. Procedural knowledge lives in skills that can be created, patched, reviewed, gated, and reused. Hermes also has a provider abstraction that lets external memory systems run without coupling the agent loop to one backend.
+The agent-improvement pattern is strongest for bounded self-improvement. It separates compact declarative memory from procedural learning. Declarative facts live in small memory stores. Procedural knowledge lives in skills that can be created, patched, reviewed, gated, and reused. It also uses a provider abstraction that lets external memory systems run without coupling the agent loop to one backend.
 
 For ReSono Voice Module, the right general design is a hybrid:
 
@@ -40,7 +40,7 @@ For ReSono Voice Module, the right general design is a hybrid:
 - procedural lessons become signal-specific playbooks or skills;
 - live signal/tool data is never replaced by learned/cached memory.
 
-## Honcho: how learning works
+## Semantic memory system: how learning works
 
 Honcho centers the model around four primitives:
 
@@ -149,7 +149,7 @@ Honcho exposes these useful surfaces:
 
 For ReSono, queue status is especially important. The UI and logs should be able to answer: "was this learning event accepted, queued, processed, errored, or skipped?"
 
-## Hermes: how learning works
+## Agent memory and skills system: how learning works
 
 Hermes has three learning layers:
 
@@ -680,9 +680,9 @@ Automation:
 
 ## Do not copy blindly
 
-Do not copy Hermes' tiny file-backed memory as the only ReSono memory system. It is useful for bounded profiles, but ReSono needs private multi-signal evidence, queue status, deletion, and Vault/Cloud adapters.
+Do not copy a tiny file-backed memory store as the only ReSono memory system. It is useful for bounded profiles, but ReSono needs private multi-signal evidence, queue status, deletion, and Vault/Cloud adapters.
 
-Do not copy Honcho's dialectic chat as the only interface. It is useful, but ReSono also needs explicit signal runtime contracts and live data freshness guarantees.
+Do not copy a dialectic chat interface as the only memory interface. It is useful, but ReSono also needs explicit signal runtime contracts and live data freshness guarantees.
 
 Do not allow background self-improvement to silently rewrite user-facing signal behavior without approval while the product is still stabilizing.
 

@@ -81,7 +81,17 @@ Set `VOICE_MODULE_ICE_SERVERS_JSON` to override it. Use TURN when users are behi
 - `docs/realtime-session-config.md`
 - `docs/tool-use.md`
 - `docs/data-store-integration.md`
+- `docs/learning-provider-contract-2026-06-15.md`
+- `docs/learning-system-research-2026-06-15.md`
+- `docs/memory-system-design-2026-06-15.md`
+- `docs/procedural-learning-system-2026-06-15.md`
 - `docs/model-delegation.md`
 - `docs/caching-and-cost.md`
 - `docs/system-message.md`
 - `docs/security-and-privacy.md`
+
+## License
+
+Free for personal and noncommercial use under the PolyForm Noncommercial
+License 1.0.0. Commercial use requires a separate paid commercial license from
+Christian McGivern and/or ReSono Labs. See `LICENSE`.
